@@ -49,21 +49,22 @@ function createCards(imgFront) {
     const li = document.createElement("li");
     li.classList.add("card");
 
-    const frontface = document.createElement("div");
-    frontface.classList.add("front-face", "hidden");
+   // const frontface = document.createElement("div");
+   // frontface.classList.add("front-face", "hidden");
     const imageFront = document.createElement("img");
     imageFront.src = imgFront;
+    imageFront.classList.add("front-face", "hidden");
 
-    const backface = document.createElement("div");
-    backface.classList.add("back-face", "face");
+   // const backface = document.createElement("div");
+   // backface.classList.add("back-face", "face");
 
     const imageBack = document.createElement("img");
     imageBack.src = "./src/assets/back.png";
+    imageBack.classList.add("back-face", "face");
 
-    frontface.appendChild(imageFront);
-    backface.appendChild(imageBack);
-    li.append(frontface, backface);
-
+    //frontface.appendChild(imageFront);
+    //backface.appendChild(imageBack);
+    li.append(imageFront, imageBack);
     return li;
 }
 
@@ -82,36 +83,34 @@ function cardClick() {
                 arrayCardsTurned.push(backface);
             } 
            
-            let faces = Array.from(document.querySelectorAll(".front-face.face > img"));
-            
+            let faces = Array.from(document.querySelectorAll(".front-face.face"));
             if(faces.length % 2 == 0) { 
-                if(faces[0] != faces[1]) {   
-                    console.log(faces[0], faces[1]);
+                if(faces[0] != faces[1]) {  
                     setTimeout(() => {
-                        faces[0].parentNode.classList.add("hidden");
-                        faces[1].parentNode.classList.add("hidden");
-                        faces[0].parentNode.classList.remove("face");
-                        faces[1].parentNode.classList.remove("face");
+                        faces[0].classList.add("hidden");
+                        faces[1].classList.add("hidden");
+                        faces[0].classList.remove("face");
+                        faces[1].classList.remove("face");
                         arrayCardsTurned[0].classList.remove("hidden");
                         arrayCardsTurned[1].classList.remove("hidden");
                         faces = [];
                         arrayCardsTurned = [];
-                    }, 1000);
+                    }, 1000);        
                 }
+              
             }    
             plays++;
-            endGame();
+            //endGame();
         })
     })
 }
 
 function endGame() {
-    const back = document.querySelectorAll(".back-face.hidden")
-    console.log(back);
+   // const back = document.querySelectorAll(".back-face.hidden,")
     const message = `
     Você ganhou em ${plays} jogadas!
     `
-    if(back.length == quantity) {
+    if(back.length == 0) {
         alert(message);
     }
 }
