@@ -1,7 +1,7 @@
 import images from "./imagesData.js";
-let arrayImgs = [...images];
 
-arrayImgs.sort(comparator);
+let arrayImgs = [...images];
+let arrayCardsTurned = [];
 let plays = 0;
 let quantity = 0;
 
@@ -36,83 +36,20 @@ function createArrayCards() {
     return {arrayCards};
 }
 
-function renderCards(array) { 
-    const ul = document.querySelector(".cards"); 
-    ul.innerHTML = "";
+function renderCards(array) {
+    const ul = document.querySelector(".cards");
     array.forEach(elt => {
-        ul.append(createCards(elt));
+         ul.innerHTML += createCards(elt);
     })
-    cardClick(); 
+    cardClick();
 }
 
 function createCards(imgFront) {
-    const li = document.createElement("li");
-    li.classList.add("card");
-
-   // const frontface = document.createElement("div");
-   // frontface.classList.add("front-face", "hidden");
-    const imageFront = document.createElement("img");
-    imageFront.src = imgFront;
-    imageFront.classList.add("front-face", "hidden");
-
-   // const backface = document.createElement("div");
-   // backface.classList.add("back-face", "face");
-
-    const imageBack = document.createElement("img");
-    imageBack.src = "./src/assets/back.png";
-    imageBack.classList.add("back-face", "face");
-
-    //frontface.appendChild(imageFront);
-    //backface.appendChild(imageBack);
-    li.append(imageFront, imageBack);
+    const li = `
+        <li class="card" id="${imgFront}">
+            <img src="./src/assets/back.png" class="back-face face" alt="">
+            <img src="${imgFront}" class="front-face hidden" alt="">
+        </li>
+    `
     return li;
 }
-
-function cardClick() {
-    const cards = document.querySelectorAll(".card");
-    let arrayCardsTurned = [];
-    cards.forEach(card => {
-        card.addEventListener("click", ()=> {
-            const backface = card.querySelector(".back-face");
-            const frontface = card.querySelector(".front-face");
-            if(frontface.classList.contains("hidden")) {
-                backface.classList.add("hidden");
-                backface.classList.remove("face");
-                frontface.classList.remove("hidden");
-                frontface.classList.add("face"); 
-                arrayCardsTurned.push(backface);
-            } 
-           
-            let faces = Array.from(document.querySelectorAll(".front-face.face"));
-            if(faces.length % 2 == 0) { 
-                if(faces[0] != faces[1]) {  
-                    setTimeout(() => {
-                        faces[0].classList.add("hidden");
-                        faces[1].classList.add("hidden");
-                        faces[0].classList.remove("face");
-                        faces[1].classList.remove("face");
-                        arrayCardsTurned[0].classList.remove("hidden");
-                        arrayCardsTurned[1].classList.remove("hidden");
-                        faces = [];
-                        arrayCardsTurned = [];
-                    }, 1000);        
-                }
-              
-            }    
-            plays++;
-            //endGame();
-        })
-    })
-}
-
-function endGame() {
-   // const back = document.querySelectorAll(".back-face.hidden,")
-    const message = `
-    Você ganhou em ${plays} jogadas!
-    `
-    if(back.length == 0) {
-        alert(message);
-    }
-}
-
-cardsDistribution();
