@@ -14,6 +14,7 @@ let plays = 0;
 let quantity = 0;
 let firstCard = "";
 let secondCard = "";
+let bloqueio = false;
 
 function cardsDistribution() {
     while(!(quantity % 2 === 0) || !(quantity >= 4 && quantity <= 14) || !(typeof(quantity) === "number") || quantity === NaN || quantity === undefined){
@@ -76,7 +77,6 @@ function endGame() {
     }
 }
 
-let bloqueio = false;
 function turnCard(card) { 
    
     if(bloqueio == true || card.querySelector(".front-face").classList.contains("card-selected-front")) {
@@ -109,8 +109,6 @@ function turnCard(card) {
             }, 1000);    
         }
     } 
-        console.log(firstCard);
     plays++;
 }
-
 cardsDistribution();
