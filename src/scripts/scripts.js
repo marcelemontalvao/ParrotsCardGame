@@ -16,7 +16,7 @@ let firstCard = "";
 let secondCard = "";
 let bloqueio = false;
 let reload = true;
-
+let time = 0;
 
 function cardsDistribution() {
     while(!(quantity % 2 === 0) || !(quantity >= 4 && quantity <= 14) || !(typeof(quantity) === "number") || quantity === NaN || quantity === undefined){
@@ -45,11 +45,17 @@ function createArrayCards() {
 
     arrayCards.sort(comparator);
     renderCards(arrayCards);
-
+    
     return {arrayCards};
 }
 
 function renderCards(array) {
+    setInterval(()=> {
+        time++
+        let count = document.getElementById("time");
+        count.innerHTML = `<span>${time}</span>`;
+        console.log(time);
+    }, 1000);
     const ul = document.querySelector(".cards");
     array.forEach(elt => {
          ul.innerHTML += createCards(elt);
@@ -69,10 +75,11 @@ function createCards(imgFront) {
     `
     return li; 
 }
+
 function endGame() {
     const back = Array.from(document.querySelectorAll(".card-selected-front"));
     const message = `
-    Você ganhou em ${plays} jogadas!
+    Você ganhou em ${plays} jogadas e ${time} segundos!
     `
     if(back.length >= quantity) {
         reload =  prompt("Deseja recomeçar o jogo?");
@@ -84,6 +91,7 @@ function endGame() {
             window.location.reload();
         } else {
             alert(message);
+            time = false
         }
     }
 }
