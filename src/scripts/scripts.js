@@ -15,6 +15,8 @@ let quantity = 0;
 let firstCard = "";
 let secondCard = "";
 let bloqueio = false;
+let reload = true;
+
 
 function cardsDistribution() {
     while(!(quantity % 2 === 0) || !(quantity >= 4 && quantity <= 14) || !(typeof(quantity) === "number") || quantity === NaN || quantity === undefined){
@@ -73,7 +75,16 @@ function endGame() {
     Você ganhou em ${plays} jogadas!
     `
     if(back.length >= quantity) {
-        alert(message);
+        reload =  prompt("Deseja recomeçar o jogo?");
+        while(!reload == "sim" || !reload == "não") {
+            reload = prompt("Deseja recomeçar o jogo?");
+        }
+        if (reload == "sim") {
+            alert(message);
+            window.location.reload();
+        } else {
+            alert(message);
+        }
     }
 }
 
