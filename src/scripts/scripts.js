@@ -1,9 +1,19 @@
-import images from "./imagesData.js";
+const images = [
+    "./assets/bobrossparrot.gif",
+    "./assets/explodyparrot.gif",
+    "./assets/fiestaparrot.gif",
+    "./assets/metalparrot.gif",
+    "./assets/revertitparrot.gif",
+    "./assets/tripletsparrot.gif",
+    "./assets/unicornparrot.gif",
+]
 
 let arrayImgs = [...images];
 let arrayCardsTurned = [];
 let plays = 0;
 let quantity = 0;
+let firstCard = "";
+let secondCard = "";
 
 function cardsDistribution() {
     while(!(quantity % 2 === 0) || !(quantity >= 4 && quantity <= 14) || !(typeof(quantity) === "number") || quantity === NaN || quantity === undefined){
@@ -41,113 +51,63 @@ function renderCards(array) {
     array.forEach(elt => {
          ul.innerHTML += createCards(elt);
     })
-    cardClick();
 }
 
 function createCards(imgFront) {
     const li = `
-        <li class="card" id="${imgFront}">
-            <img src="./src/assets/back.png" class="back-face face" alt="">
-            <img src="${imgFront}" class="front-face hidden" alt="">
+        <li class="card" onclick="turnCard(this)" id="./${imgFront}">
+            <div class="game-card front-face face">
+                <img src="./assets/back.png"/>
+            </div>
+            <div class="game-card back-face face">
+                <img src="./${imgFront}"/>
+            </div>
         </li>
     `
-    return li;
+    return li; 
 }
-/*
-function turnCard(element) {
-    console.log(element);
-    let arrayCardsTurned = [];
-    const backface = element.parentNode.querySelector(".back-face");
-    const frontface = element.parentNode.querySelector(".front-face");
-    
-    if(frontface.classList.contains("hidden")) {
-        backface.classList.add("hidden");
-        backface.classList.remove("face");
-        frontface.classList.remove("hidden");
-        frontface.classList.add("face"); 
-        arrayCardsTurned.push(backface);
-    } else {
-        backface.classList.add("face");
-        backface.classList.remove("hidden");
-        frontface.classList.remove("face");
-        frontface.classList.add("hidden"); 
-    }
-}
-
-function handleCards(card1, card2) {
-    console.log(card1.id);
-    console.log(card2.id);
-    if(card1.id != card2.id) {  
-        console.log("CAIU AQUI")
-        setInterval(() => {
-            turnCard(card1);
-            turnCard(card2);
-        }, 1000);      
-    } else {
-        console.log("caiu aqui")
-        /*if(!arrayCardsTurned.find(card1)) {
-            arrayCardsTurned.push(card1, card2);
-        }
-        console.log("ARRAY: ", arrayCardsTurned);
-    }
-}
-*/
-function cardClick() {
-    const cards = document.querySelectorAll(".card");
-    let firstCard = "";
-    let secondCard = "";
-    cards.forEach(card => {
-        card.addEventListener("click", (event)=> {
-
-            if(firstCard == undefined) {
-                event.target.classList.add("hidden");
-                const front = event.target.parentNode.querySelector(".front-face")
-                front.classList.remove("hidden");
-                firstCard = card;
-
-            } else { 
-                event.target.classList.add("hidden");
-                const front = event.target.parentNode.querySelector(".front-face")
-                front.classList.remove("hidden");
-                secondCard = card;
-                if(firstCard.id != secondCard.id) {  
-                    setTimeout(() => {
-                    const front1 = firstCard.querySelector(".front-face")
-                    front1.classList.add("hidden");
-                    const back1 = firstCard.querySelector(".back-face")
-                    back1.classList.remove('hidden');
-                    
-                    const front2 = secondCard.querySelector(".front-face")
-                    front2.classList.add("hidden");
-                    const back2 = secondCard.querySelector(".back-face")
-                    back2.classList.remove('hidden');
-                    }, 1000);
-                    firstCard = undefined;
-                    secondCard = undefined;      
-                } else {
-                    console.log("caiu aqui") 
-                    firstCard = undefined;
-                    secondCard = undefined; 
-                }
-            }
-            
-            plays++;
-            //endGame();
-        })
-    })
-}
-
-
-cardsDistribution();
-
-
-/*
 function endGame() {
-   // const back = document.querySelectorAll(".back-face.hidden,")
+    const back = Array.from(document.querySelectorAll(".card-selected-front"));
     const message = `
     Você ganhou em ${plays} jogadas!
     `
-    if(back.length == 0) {
+    if(back.length >= quantity) {
         alert(message);
     }
-}*/
+}
+
+let bloqueio = false;
+function turnCard(card) { 
+   
+    if(bloqueio == true) {
+        return;
+    } 
+    card.querySelector(".back-face").classList.add("card-selected-back");
+    card.querySelector(".front-face").classList.add("card-selected-front");
+   
+    if(firstCard == "") { 
+        firstCard = card;
+    } else { 
+        
+        if(card.querySelector(".back-face").innerHTML == firstCard.querySelector(".back-face").innerHTML) {
+            firstCard = "";  
+        } else {
+            bloqueio = true;
+            setTimeout(() => {
+                firstCard.querySelector(".back-face").classList.remove("card-selected-back");
+                firstCard.querySelector(".front-face").classList.remove("card-selected-front");
+                card.querySelector(".back-face").classList.remove("card-selected-back");
+                card.querySelector(".front-face").classList.remove("card-selected-front");
+                firstCard = "";
+                bloqueio = false;
+            }, 1000);    
+        }
+    } 
+    plays++;
+    setTimeout(() => {
+        endGame();
+    }, 1200);   
+    
+}
+
+cardsDistribution();
