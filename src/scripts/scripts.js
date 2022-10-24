@@ -79,18 +79,23 @@ function endGame() {
 let bloqueio = false;
 function turnCard(card) { 
    
-    if(bloqueio == true) {
+    if(bloqueio == true || card.querySelector(".front-face").classList.contains("card-selected-front")) {
         return;
     } 
+
     card.querySelector(".back-face").classList.add("card-selected-back");
     card.querySelector(".front-face").classList.add("card-selected-front");
-   
+
     if(firstCard == "") { 
         firstCard = card;
     } else { 
-        
-        if(card.querySelector(".back-face").innerHTML == firstCard.querySelector(".back-face").innerHTML) {
-            firstCard = "";  
+        secondCard = card;
+        if(secondCard.id == firstCard.id) {
+            firstCard = "";
+            secondCard = "";   
+            setTimeout(() => {
+                endGame();
+            }, 1000); 
         } else {
             bloqueio = true;
             setTimeout(() => {
@@ -99,15 +104,13 @@ function turnCard(card) {
                 card.querySelector(".back-face").classList.remove("card-selected-back");
                 card.querySelector(".front-face").classList.remove("card-selected-front");
                 firstCard = "";
+                secondCard = "";  
                 bloqueio = false;
             }, 1000);    
         }
     } 
+        console.log(firstCard);
     plays++;
-    setTimeout(() => {
-        endGame();
-    }, 1200);   
-    
 }
 
 cardsDistribution();
